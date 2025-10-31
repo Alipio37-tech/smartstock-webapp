@@ -1,0 +1,20 @@
+# Requirements for Inventory Management System
+
+# This is a browser-based (HTML/JS) project.
+# No Python or Node.js dependencies are required for basic usage.
+# To run locally, you only need a modern web browser (Chrome, Edge, Firefox, etc.).
+
+# If you want to run a local server for better file access (recommended for some browsers):
+# Install Python (https://www.python.org/)
+# Then run:
+#   python -m http.server
+# and open http://localhost:8000/ in your browser.
+
+# External JS libraries used (included in project or via CDN):
+# - Chart.js (for charts)
+# - jsQR (for QR/barcode scanning)
+
+# If you want to use npm for dependency management (optional):
+# npm install chart.js jsqr
+
+# No backend/server required.

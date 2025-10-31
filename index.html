@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <style>
+        /* Existing styles from the second code snippet */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(45deg, #f9fafb, #e3f2fd);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            animation: backgroundFade 5s infinite alternate;
+        }
+
+        @keyframes backgroundFade {
+            0% { background: #f9fafb; }
+            100% { background: #bbdefb; }
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 2em;
+            background-color: #171717;
+            border-radius: 25px;
+            transition: .4s ease-in-out;
+            width: 300px;
+        }
+
+        .form:hover {
+            transform: scale(1.05);
+            border: 1px solid black;
+        }
+
+        #heading {
+            text-align: center;
+            margin: 1em 0;
+            color: rgb(255, 255, 255);
+            font-size: 1.2em;
+        }
+
+        .field {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5em;
+            border-radius: 25px;
+            padding: 0.6em;
+            border: none;
+            outline: none;
+            color: white;
+            background-color: #fbf6f6;
+            box-shadow: inset 2px 5px 10px rgb(239, 238, 238);
+            margin: 10px 0; /* Add margin for spacing */
+        
+        }
+
+        .input-icon {
+            height: 1.3em;
+            width: 1.3em;
+            fill: rgb(12, 0, 0);
+        }
+
+        .input-field {
+            background: none;
+            border: none;
+            outline: none;
+            width: 100%;
+            color: #050000;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
+            margin-top: 2.5em;
+        }
+
+        .button1, .button2, .button3 {
+            padding: 0.5em;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            transition: 0.4s ease-in-out;
+            background-color: #252525;
+            color: white;
+            cursor: pointer;
+            margin: 5px; /* Add margin for spacing */
+        }
+
+        .button1:hover, .button2:hover {
+            background-color: black;
+            color: white;
+        }
+
+        .switch-auth {
+            text-align: center;
+            color: white;
+            margin-top: 1em;
+        }
+
+        .switch-auth a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .switch-auth a:hover {
+            text-decoration: underline;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2ecc71;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            opacity: 0;
+            animation: showToast 0.5s ease forwards;
+        }
+
+        
+
+        @keyframes showToast {
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+
+
+
+        /* Truck Animation Styles */
+.loader {
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .truckWrapper {
+    width: 200px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+    justify-content: flex-end;
+    overflow-x: hidden;
+  }
+  
+  /* Truck upper body */
+  .truckBody {
+    width: 130px;
+    height: fit-content;
+    margin-bottom: 6px;
+    animation: motion 1s linear infinite;
+  }
+  
+  /* Truck suspension animation */
+  @keyframes motion {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(3px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+  
+  /* Truck's tires */
+  .truckTires {
+    width: 130px;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 10px 0px 15px;
+    position: absolute;
+    bottom: 0;
+  }
+  
+  .truckTires svg {
+    width: 24px;
+  }
+  
+  .road {
+    width: 100%;
+    height: 1.5px;
+    background-color: #282828;
+    position: relative;
+    bottom: 0;
+    align-self: flex-end;
+    border-radius: 3px;
+  }
+  
+  .road::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 100%;
+    background-color: #282828;
+    right: -50%;
+    border-radius: 3px;
+    animation: roadAnimation 1.4s linear infinite;
+    border-left: 10px solid white;
+  }
+  
+  .road::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 100%;
+    background-color: #282828;
+    right: -65%;
+    border-radius: 3px;
+    animation: roadAnimation 1.4s linear infinite;
+    border-left: 4px solid white;
+  }
+  
+  .lampPost {
+    position: absolute;
+    bottom: 0;
+    right: -90%;
+    height: 90px;
+    animation: roadAnimation 1.4s linear infinite;
+  }
+  
+  @keyframes roadAnimation {
+    0% {
+      transform: translateX(0px);
+    }
+    100% {
+      transform: translateX(-350px);
+    }
+  }
+
+
+  
+        /* Styles for the loader */
+        .pl {
+            width: 6em;
+            height: 6em;
+            display: none; /* Initially hidden */
+            margin: 20px auto;
+        }
+
+        .pl__ring {
+            animation: ringA 2s linear infinite;
+        }
+
+        .pl__ring--a {
+            stroke: #f42f25;
+        }
+
+        .pl__ring--b {
+            animation-name: ringB;
+            stroke: #ffdd00;
+        }
+
+        .pl__ring--c {
+            animation-name: ringC;
+            stroke: #255ff4;
+        }
+
+        .pl__ring--d {
+            animation-name: ringD;
+            stroke: #2cf425;
+        }
+
+        /* Animations for the loader */
+        @keyframes ringA {
+            from,
+            4% {
+                stroke-dasharray: 0 660;
+                stroke-width: 20;
+                stroke-dashoffset: -330;
+            }
+
+            12% {
+                stroke-dasharray: 60 600;
+                stroke-width: 30;
+                stroke-dashoffset: -335;
+            }
+
+            32% {
+                stroke-dasharray: 60 600;
+                stroke-width: 30;
+                stroke-dashoffset: -595;
+            }
+
+            40%,
+            54% {
+                stroke-dasharray: 0 660;
+                stroke-width: 20;
+                stroke-dashoffset: -660;
+            }
+
+            62% {
+                stroke-dasharray: 60 600;
+                stroke-width: 30;
+                stroke-dashoffset: -665;
+            }
+
+            82% {
+                stroke-dasharray: 60 600;
+                stroke-width: 30;
+                stroke-dashoffset: -925;
+            }
+
+            90%,
+            to {
+                stroke-dasharray: 0 660;
+                stroke-width: 20;
+                stroke-dashoffset: -990;
+            }
+        }
+
+        @keyframes ringB {
+            from,
+            12% {
+                stroke-dasharray: 0 220;
+                stroke-width: 20;
+                stroke-dashoffset: -110;
+            }
+
+            20% {
+                stroke-dasharray: 20 200;
+                stroke-width: 30;
+                stroke-dashoffset: -115;
+            }
+
+            40% {
+                stroke-dasharray: 20 200;
+                stroke-width: 30;
+                stroke-dashoffset: -195;
+            }
+
+            48%,
+            62% {
+                stroke-dasharray: 0 220;
+                stroke-width: 20;
+                stroke-dashoffset: -220;
+            }
+
+            70% {
+                stroke-dasharray: 20 200;
+                stroke-width: 30;
+                stroke-dashoffset: -225;
+            }
+
+            90% {
+                stroke-dasharray: 20 200;
+                stroke-width: 30;
+                stroke-dashoffset: -305;
+            }
+
+            98%,
+            to {
+                stroke-dasharray: 0 220;
+                stroke-width: 20;
+                stroke-dashoffset: -330;
+            }
+        }
+
+        @keyframes ringC {
+            from {
+                stroke-dasharray: 0 440;
+                stroke-width: 20;
+                stroke-dashoffset: 0;
+            }
+
+            8% {
+                stroke-dasharray: 40 400;
+                stroke-width: 30;
+                stroke-dashoffset: -5;
+            }
+
+            28% {
+                stroke-dasharray: 40 400;
+                stroke-width: 30;
+                stroke-dashoffset: -175;
+            }
+
+            36%,
+            58% {
+                stroke-dasharray: 0 440;
+                stroke-width: 20;
+                stroke-dashoffset: -220;
+            }
+
+            66% {
+                stroke-dasharray: 40 400;
+                stroke-width: 30;
+                stroke-dashoffset: -225;
+            }
+
+            86% {
+                stroke-dasharray: 40 400;
+                stroke-width: 30;
+                stroke-dashoffset: -395;
+            }
+
+            94%,
+            to {
+                stroke-dasharray: 0 440;
+                stroke-width: 20;
+                stroke-dashoffset: -440;
+            }
+        }
+
+        @keyframes ringD {
+            from,
+            8% {
+                stroke-dasharray: 0 440;
+                stroke-width: 20;
+                stroke-dashoffset: 0;
+            }
+
+            16% {
+                stroke-dasharray: 40 400;
+                stroke-width: 30;
+                stroke-dashoffset: -5;
+            }
+
+            36% {
+                stroke-dasharray: 40 400;
+                stroke-width: 30;
+                stroke-dashoffset: -175;
+            }
+
+            44%,
+            50% {
+                stroke-dasharray: 0 440;
+                stroke-width: 20;
+                stroke-dashoffset: -220;
+            }
+
+            58% {
+                stroke-dasharray: 40 400;
+                stroke-width: 30;
+                stroke-dashoffset: -225;
+            }
+
+            78% {
+                stroke-dasharray: 40 400;
+                stroke-width: 30;
+                stroke-dashoffset: -395;
+            }
+
+            86%,
+            to {
+                stroke-dasharray: 0 440;
+                stroke-width: 20;
+                stroke-dashoffset: -440;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loaderContainer">
+        <!-- Loader from Uiverse.io -->
+        <div class="loader">
+            <div class="truckWrapper">
+                <div class="truckBody">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 198 93"
+                        class="trucksvg"
+                    >
+                        <path
+                            stroke-width="3"
+                            stroke="#282828"
+                            fill="#F83D3D"
+                            d="M135 22.5H177.264C178.295 22.5 179.22 23.133 179.594 24.0939L192.33 56.8443C192.442 57.1332 192.5 57.4404 192.5 57.7504V89C192.5 90.3807 191.381 91.5 190 91.5H135C133.619 91.5 132.5 90.3807 132.5 89V25C132.5 23.6193 133.619 22.5 135 22.5Z"
+                        ></path>
+                        <path
+                            stroke-width="3"
+                            stroke="#282828"
+                            fill="#7D7C7C"
+                            d="M146 33.5H181.741C182.779 33.5 183.709 34.1415 184.078 35.112L190.538 52.112C191.16 53.748 189.951 55.5 188.201 55.5H146C144.619 55.5 143.5 54.3807 143.5 53V36C143.5 34.6193 144.619 33.5 146 33.5Z"
+                        ></path>
+                        <path
+                            stroke-width="2"
+                            stroke="#282828"
+                            fill="#282828"
+                            d="M150 65C150 65.39 149.763 65.8656 149.127 66.2893C148.499 66.7083 147.573 67 146.5 67C145.427 67 144.501 66.7083 143.873 66.2893C143.237 65.8656 143 65.39 143 65C143 64.61 143.237 64.1344 143.873 63.7107C144.501 63.2917 145.427 63 146.5 63C147.573 63 148.499 63.2917 149.127 63.7107C149.763 64.1344 150 64.61 150 65Z"
+                        ></path>
+                        <rect
+                            stroke-width="2"
+                            stroke="#282828"
+                            fill="#FFFCAB"
+                            rx="1"
+                            height="7"
+                            width="5"
+                            y="63"
+                            x="187"
+                        ></rect>
+                        <rect
+                            stroke-width="2"
+                            stroke="#282828"
+                            fill="#282828"
+                            rx="1"
+                            height="11"
+                            width="4"
+                            y="81"
+                            x="193"
+                        ></rect>
+                        <rect
+                            stroke-width="3"
+                            stroke="#282828"
+                            fill="#DFDFDF"
+                            rx="2.5"
+                            height="90"
+                            width="121"
+                            y="1.5"
+                            x="6.5"
+                        ></rect>
+                        <rect
+                            stroke-width="2"
+                            stroke="#282828"
+                            fill="#DFDFDF"
+                            rx="2"
+                            height="4"
+                            width="6"
+                            y="84"
+                            x="1"
+                        ></rect>
+                    </svg>
+                </div>
+                <div class="truckTires">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 30 30"
+                        class="tiresvg"
+                    >
+                        <circle
+                            stroke-width="3"
+                            stroke="#282828"
+                            fill="#282828"
+                            r="13.5"
+                            cy="15"
+                            cx="15"
+                        ></circle>
+                        <circle fill="#DFDFDF" r="7" cy="15" cx="15"></circle>
+                    </svg>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 30 30"
+                        class="tiresvg"
+                    >
+                        <circle
+                            stroke-width="3"
+                            stroke="#282828"
+                            fill="#282828"
+                            r="13.5"
+                            cy="15"
+                            cx="15"
+                        ></circle>
+                        <circle fill="#DFDFDF" r="7" cy="15" cx="15"></circle>
+                    </svg>
+                </div>
+                <div class="road"></div>
+
+                <svg
+                    xml:space="preserve"
+                    viewBox="0 0 453.459 453.459"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    xmlns="http://www.w3.org/2000/svg"
+                    id="Capa_1"
+                    version="1.1"
+                    fill="#000000"
+                    class="lampPost"
+                >
+                    <path
+                        d="M252.882,0c-37.781,0-68.686,29.953-70.245,67.358h-6.917v8.954c-26.109,2.163-45.463,10.011-45.463,19.366h9.993
+c-1.65,5.146-2.507,10.54-2.507,16.017c0,28.956,23.558,52.514,52.514,52.514c28.956,0,52.514-23.558,52.514-52.514
+c0-5.478-0.856-10.872-2.506-16.017h9.992c0-9.354-19.352-17.204-45.463-19.366v-8.954h-6.149C200.189,38.779,223.924,16,252.882,16
+c29.952,0,54.32,24.368,54.32,54.32c0,28.774-11.078,37.009-25.105,47.437c-17.444,12.968-37.216,27.667-37.216,78.884v113.914
+h-0.797c-5.068,0-9.174,4.108-9.174,9.177c0,2.844,1.293,5.383,3.321,7.066c-3.432,27.933-26.851,95.744-8.226,115.459v11.202h45.75
+v-11.202c18.625-19.715-4.794-87.527-8.227-115.459c2.029-1.683,3.322-4.223,3.322-7.066c0-5.068-4.107-9.177-9.176-9.177h-0.795
+V196.641c0-43.174,14.942-54.283,30.762-66.043c14.793-10.997,31.559-23.461,31.559-60.277C323.202,31.545,291.656,0,252.882,0z
+M232.77,111.694c0,23.442-19.071,42.514-42.514,42.514c-23.442,0-42.514-19.072-42.514-42.514c0-5.531,1.078-10.957,3.141-16.017
+h78.747C231.693,100.736,232.77,106.162,232.77,111.694z"
+                    ></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div id="formContainer" style="display: none;">
+        
+        <div id="loginPage" class="form">
+            <p id="heading">Login</p>
+            <div class="field">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M13.106 7.222c0-2.967-2.249-5.032-5.482-5.032-3.35 0-5.646 2.318-5.646 5.702 0 3.493 2.235 5.708 5.762 5.708.862 0 1.689-.123 2.304-.335v-.862c-.43.199-1.354.328-2.29.328-2.926 0-4.813-1.88-4.813-4.798 0-2.844 1.921-4.881 4.594-4.881 2.735 0 4.608 1.688 4.608 4.156 0 1.682-.554 2.769-1.416 2.769-.492 0-.772-.28-.772-.76V5.206H8.923v.834h-.11c-.266-.595-.881-.964-1.6-.964-1.4 0-2.378 1.162-2.378 2.823 0 1.737.957 2.906 2.379 2.906.8 0 1.415-.39 1.709-1.087h.11c.081.67.703 1.148 1.503 1.148 1.572 0 2.57-1.415 2.57-3.643zm-7.177.704c0-1.197.54-1.907 1.456-1.907.93 0 1.524.738 1.524 1.907S8.308 9.84 7.371 9.84c-.895 0-1.442-.725-1.442-1.914z"></path>
+                </svg>
+                <input autocomplete="off" placeholder="Username" class="input-field" type="text" id="loginUsername" onkeydown="handleKeyPress(event, login)">
+            </div>
+            <div class="field">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path>
+                </svg>
+                <input placeholder="Password" class="input-field" type="password" id="loginPassword" onkeydown="handleKeyPress(event, login)">
+            </div>
+            <div class="btn">
+                <button class="button1" id="loginBtn">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                <button class="button2" onclick="showSignUp()">Sign Up</button>
+            </div>
+            
+            <div class="switch-auth">
+                Don't have an account? <a href="#" onclick="showSignUp()">Sign Up</a>
+            </div>
+
+                        
+            <!-- Loader SVG -->
+            <svg viewBox="0 0 240 240" height="240" width="240" class="pl" id="loader">
+                <circle
+                    stroke-linecap="round"
+                    stroke-dashoffset="-330"
+                    stroke-dasharray="0 660"
+                    stroke-width="20"
+                    stroke="#000"
+                    fill="none"
+                    r="105"
+                    cy="120"
+                    cx="120"
+                    class="pl__ring pl__ring--a"
+                ></circle>
+                <circle
+                    stroke-linecap="round"
+                    stroke-dashoffset="-110"
+                    stroke-dasharray="0 220"
+                    stroke-width="20"
+                    stroke="#000"
+                    fill="none"
+                    r="35"
+                    cy="120"
+                    cx="120"
+                    class="pl__ring pl__ring--b"
+                ></circle>
+                <circle
+                    stroke-linecap="round"
+                    stroke-dasharray="0 440"
+                    stroke-width="20"
+                    stroke="#000"
+                    fill="none"
+                    r="70"
+                    cy="120"
+                    cx="85"
+                    class="pl__ring pl__ring--c"
+                ></circle>
+                <circle
+                    stroke-linecap="round"
+                    stroke-dasharray="0 440"
+                    stroke-width="20"
+                    stroke="#000"
+                    fill="none"
+                    r="70"
+                    cy="120"
+                    cx="155"
+                    class="pl__ring pl__ring--d"
+                ></circle>
+            </svg>
+        </div>
+
+
+        
+
+
+
+        <div id="signUpPage" class="form" style="display: none;">
+            <p id="heading">Sign Up</p>
+            <div class="field">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M13.106 7.222c0-2.967-2.249-5.032-5.482-5.032-3.35 0-5.646 2.318-5.646 5.702 0 3.493 2.235 5.708 5.762 5.708.862 0 1.689-.123 2.304-.335v-.862c-.43.199-1.354.328-2.29.328-2.926 0-4.813-1.88-4.813-4.798 0-2.844 1.921-4.881 4.594-4.881 2.735 0 4.608 1.688 4.608 4.156 0 1.682-.554 2.769-1.416 2.769-.492 0-.772-.28-.772-.76V5.206H8.923v.834h-.11c-.266-.595-.881-.964-1.6-.964-1.4 0-2.378 1.162-2.378 2.823 0 1.737.957 2.906 2.379 2.906.8 0 1.415-.39 1.709-1.087h.11c.081.67.703 1.148 1.503 1.148 1.572 0 2.57-1.415 2.57-3.643zm-7.177.704c0-1.197.54-1.907 1.456-1.907.93 0 1.524.738 1.524 1.907S8.308 9.84 7.371 9.84c-.895 0-1.442-.725-1.442-1.914z"></path>
+                </svg>
+                <input autocomplete="off" placeholder="Username" class="input-field" type="text" id="signUpUsername" onkeydown="handleKeyPress(event, signUp)">
+            </div>
+            <div class="field">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path>
+                </svg>
+                <input placeholder="Password" class="input-field" type="password" id="signUpPassword" onkeydown="handleKeyPress(event, signUp)">
+            </div>
+            <div class="btn">
+                <button class="button1" id="signUpBtn">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sign Up&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                <button class="button2" onclick="showLogin()">Login</button>
+            </div>
+            <div class="switch-auth">
+                Already have an account? <a href="#" onclick="showLogin()">Login</a>
+            </div>
+        </div>
+
+        <div id="notification" class="notification" style="display: none;"></div>
+    </div>
+
+    <script>
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+
+        window.onload = function () {
+            // Show the loader initially
+            document.getElementById('loaderContainer').style.display = 'flex';
+
+            // Hide the loader and show the form after 3 seconds
+            setTimeout(() => {
+                document.getElementById('loaderContainer').style.display = 'none';
+                document.getElementById('formContainer').style.display = 'block';
+            }, 3000);
+
+            document.getElementById('loginBtn').addEventListener('click', login);
+            document.getElementById('signUpBtn').addEventListener('click', signUp);
+
+            // Prevent access to inventory if not logged in
+            if (window.location.pathname.includes("inventory.html") && !localStorage.getItem('isLoggedIn')) {
+                window.location.href = "index.html"; // Redirect to login page
+            }
+        };
+
+        function showLogin() {
+    document.getElementById('loginPage').style.display = 'block';
+    document.getElementById('signUpPage').style.display = 'none';
+    clearFormFields(); // Clear all form fields
+}
+
+function showSignUp() {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('signUpPage').style.display = 'block';
+    clearFormFields(); // Clear all form fields
+}
+
+
+
+
+
+
+        function handleKeyPress(event, action) {
+            if (event.key === 'Enter') {
+                action();
+            }
+        }
+
+        function login() {
+    let username = document.getElementById('loginUsername').value.trim();
+    let password = document.getElementById('loginPassword').value.trim();
+
+    // Show loader
+    document.getElementById('loader').style.display = 'block';
+
+    // Simulate a 2-second delay for the loader
+    setTimeout(() => {
+        // Hide loader after the timeout
+        document.getElementById('loader').style.display = 'none';
+
+        if (!username || !password) {
+            showNotification("Please fill in all fields.", "error");
+            return;
+        }
+
+        let user = users.find(u => u.username === username && u.password === password);
+        if (user) {
+            localStorage.setItem('isLoggedIn', 'true'); // Set login flag
+            localStorage.setItem('loggedInUser', username); // Store the username
+            showNotification("Login successful!", "success");
+            setTimeout(() => {
+                window.location.href = "inventory.html";
+            }, 1000);
+        } else {
+            showNotification("Invalid username or password.", "error");
+            document.getElementById('loginPage').classList.add('shake');
+            setTimeout(() => document.getElementById('loginPage').classList.remove('shake'), 500);
+
+            // Clear the username and password fields
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+    }, 2000); // 2-second delay
+
+}
+
+
+function clearFormFields() {
+    // Clear Login form fields
+    document.getElementById('loginUsername').value = '';
+    document.getElementById('loginPassword').value = '';
+
+    // Clear Sign Up form fields
+    document.getElementById('signUpUsername').value = '';
+    document.getElementById('signUpPassword').value = '';
+}
+
+
+
+
+        function signUp() {
+            let username = document.getElementById('signUpUsername').value.trim();
+            let password = document.getElementById('signUpPassword').value.trim();
+
+            // Show loader
+            document.getElementById('loader').style.display = 'block';
+
+            setTimeout(() => {
+                if (!username || !password) {
+                    showNotification("Please fill in all fields.", "error");
+                    document.getElementById('loader').style.display = 'none';
+                    return;
+                }
+
+                let existingUser = users.find(u => u.username === username);
+                if (existingUser) {
+                    showNotification("Username already exists.", "error");
+                    document.getElementById('loader').style.display = 'none';
+                    return;
+                }
+
+                users.push({ username, password });
+                localStorage.setItem('users', JSON.stringify(users));
+                showNotification("Sign up successful! Please login.", "success");
+                showLogin();
+                document.getElementById('loader').style.display = 'none';
+            }, 2000); // Simulate a 2-second delay for the loader
+        }
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn'); // Remove login flag
+            window.location.href = "index.html"; // Redirect to login page
+        }
+
+        
+
+        function showNotification(message, type) {
+            let notification = document.getElementById('notification');
+            notification.innerHTML = message;
+            notification.style.backgroundColor = (type === 'success') ? '#2ecc71' : '#e74c3c';
+            notification.style.display = 'block';
+            setTimeout(() => notification.style.display = 'none', 3000);
+        }
+    </script>
+</body>
+</html>
+
+
+

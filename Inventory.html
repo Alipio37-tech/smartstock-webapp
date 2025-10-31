@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<!-- saved from url=(0089)file:///C:/HIGHWAY/FINAL%20PROJECT%20WORK/Inventory%20Management%20System/inventory.html# -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9fafb;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-theme {
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+        }
+
+        h2, h3 {
+            text-align: center;
+            margin: 20px 0;
+            color: #2c3e50;
+        }
+
+        input, button, select {
+            font-size: 16px;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+/* Menu Bar */
+
+
+
+
+
+#menuBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #2c3e50;
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(183, 208, 242, 0.2);
+    z-index: 1000;
+    
+    
+}
+
+
+
+
+
+
+#menuBar nav {
+    display: center;
+    gap: 20px;
+    
+}
+
+#menuBar nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover Effect */
+#menuBar nav a:hover {
+    background-color: #2ecc71;
+    transform: translateY(-5px);
+}
+
+
+
+/* Active Page */
+#menuBar nav a.active {
+    background-color: #22e2ab; /* Highlight active page */
+    font-weight: bold;
+}
+
+
+
+
+
+
+
+        /* Logout Button */
+        #logoutButton {
+            
+            padding: 10px 15px;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+
+          
+
+        #logoutButton:hover {
+            background-color: #c0392b;
+            transform: translateY(-5px);
+        }
+
+
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        
+
+        body.dark-theme table {
+            background-color: #2c3e50;
+            color: #f0f0f0;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        body.dark-theme tr:nth-child(even) {
+            background-color: #34495e;
+        }
+
+        tr:hover {
+            background-color: #e0f7fa;
+        }
+
+        body.dark-theme tr:hover {
+            background-color: #4a6b8a;
+        }
+
+        /* Highlight for Out-of-Stock Products */
+
+        /* Bubbling animation for low stock */
+        .low-stock {
+            animation: bubble 1.2s infinite cubic-bezier(.36,.07,.19,.97) both;
+            box-shadow: 0 0 20px 4px #ffb34755;
+        }
+        @keyframes bubble {
+            0% {
+                transform: scale(1) translateY(0);
+                box-shadow: 0 0 20px 4px #ffb34755;
+            }
+            30% {
+                transform: scale(1.08) translateY(-6px);
+                box-shadow: 0 0 30px 8px #ffb34799;
+            }
+            60% {
+                transform: scale(0.98) translateY(2px);
+                box-shadow: 0 0 10px 2px #ffb34733;
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                box-shadow: 0 0 20px 4px #ffb34755;
+            }
+        }
+
+        /* General fade-in for all main sections */
+        #dashboard, #productsPage, #auditLog, #settingsPage, #welcomePage, #scanProductForm {
+            animation: fadeInMain 0.8s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes fadeInMain {
+            0% { opacity: 0; transform: translateY(30px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Button hover pop effect */
+        button {
+            transition: background 0.3s, color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 4px 16px #3498db33;
+        }
+
+        /* Animated border for scan form */
+        #scanProductForm {
+            border-image: linear-gradient(90deg, #ff4e50, #f9d423, #24fe41, #24c6dc, #ff4e50) 1;
+            animation: borderMove 3s linear infinite;
+        }
+        @keyframes borderMove {
+            0% { border-image-slice: 1; }
+            100% { border-image-slice: 1; }
+        }
+
+        /* Animated notification pop-in */
+        .notification {
+            animation: showToast 0.5s cubic-bezier(.36,.07,.19,.97) both, popIn 0.7s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.7) translateY(50px); opacity: 0; }
+            80% { transform: scale(1.1) translateY(-10px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        /* Search Bar */
+        #searchInput {
+            display: block;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        #searchInput:focus {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        /* Filters */
+        #filters {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2ecc71; /* Default success color */
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(50px);
+            animation: showToast 0.5s ease forwards;
+        }
+
+        @keyframes showToast {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Details Modal */
+        #details {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 80%;
+            max-width: 600px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .close-btn:hover {
+            color: #e74c3c;
+        }
+
+        #detailsContent {
+            text-align: left;
+        }
+
+        /* Edit Price Section */
+        .edit-price {
+            display: none;
+            margin-top: 10px;
+        }
+
+        /* Welcome Page */
+        #welcomePage {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url("C:\\Users\\amaze\\Desktop\\Project\\Inventory Managemen\\12x8.jpg");
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Dashboard */
+        #dashboard {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            margin-top: 80px;
+        }
+
+        .dashboard-card {
+            display: inline-block;
+            width: 200px;
+            padding: 20px;
+            margin: 10px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .dashboard-card h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+
+        .dashboard-card p {
+            margin: 10px 0 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        /* Settings Page */
+        #settingsPage {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            margin-top: 80px;
+        }
+
+        /* Confirmation Dialog */
+        .confirmation-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 300px;
+            text-align: center;
+        }
+
+        .confirmation-dialog button {
+            margin: 10px;
+        }
+
+        /* Audit Log */
+        #auditLog {
+            display: none;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 800px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 80px;
+        }
+
+        #auditLog h3 {
+            text-align: center;
+        }
+        
+
+
+        #auditLog:hover {
+            transform: translateY(-5px);
+        }
+
+
+        #auditLogContent {
+            max-height: 800px;
+            overflow-y: auto;
+        }
+
+        /* Print Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printSection, #printSection * {
+                visibility: visible;
+            }
+            #printSection {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+        <body>
+        <!-- Receipt Modal -->
+        <div id="receiptModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:9999; align-items:center; justify-content:center;">
+            <div style="background:#fff; border-radius:10px; box-shadow:0 4px 24px rgba(0,0,0,0.2); padding:32px 24px; min-width:320px; max-width:90vw; margin:auto; position:relative;">
+                <h2 style="margin-top:0;">Receipt</h2>
+                <div id="receiptContent"></div>
+                <button onclick="closeReceipt()" style="margin-top:20px; padding:8px 24px; border:none; background:#0078d4; color:#fff; border-radius:5px; font-size:16px; cursor:pointer;">Close</button>
+            </div>
+        </div>
+    <!-- Menu Bar -->
+    <div id="menuBar">
+        <nav>
+            <span id="loggedInUser"></span>
+            <a href="file:///C:/HIGHWAY/FINAL%20PROJECT%20WORK/Inventory%20Management%20System/inventory.html#" onclick="showDashboard()" class="">Dashboard</a>
+            <a href="file:///C:/HIGHWAY/FINAL%20PROJECT%20WORK/Inventory%20Management%20System/inventory.html#" onclick="showProductsPage()" class="active">Products</a>
+            <a href="file:///C:/HIGHWAY/FINAL%20PROJECT%20WORK/Inventory%20Management%20System/inventory.html#" onclick="showAuditLog()">Audit Log</a>
+            <a href="file:///C:/HIGHWAY/FINAL%20PROJECT%20WORK/Inventory%20Management%20System/inventory.html#" onclick="showSettingsPage()">Settings</a>
+            <a href="file:///C:/HIGHWAY/FINAL%20PROJECT%20WORK/Inventory%20Management%20System/inventory.html#" onclick="showCalculator()">Calculator</a>
+            <a href="https://www.bloomberg.com/business" target="_blank" rel="noopener" style="color:#fff; font-weight:bold;">News</a>
+            <button id="logoutButton" onclick="confirmLogout()">Logout</button>
+        </nav>
+    </div>
+    <!-- Dashboard -->
+        <div id="dashboard" style="display: none;">
+            <h2>Dashboard</h2>
+            <div class="dashboard-card">
+                <h3>Total Products</h3>
+                <p id="totalProducts">2</p>
+            </div>
+            <div class="dashboard-card">
+                <h3>Out of Stock</h3>
+                <p id="outOfStock">0</p>
+            </div>
+            <div class="dashboard-card">
+                <h3>Total Revenue</h3>
+                <p id="totalRevenue">GHC 0.00</p>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="" onclick="showLowStockItems()"> 
+                <h3>Show Low Stock</h3>               
+               <p id="showLowStockItems">Click</p>
+            </div>
+            </div>
+
+
+            <div class="dashboard-card">
+                <div class="" onclick="generateReport()"> 
+                <h3>Report</h3>               
+               <p id="generateReport">Download</p>
+               
+            </div>
+            </div>
+            
+            <canvas id="revenueChart" width="400" height="200"></canvas>
+        
+        </div>
+
+
+           
+                 
+
+
+    <!-- Welcome Page -->
+    <div id="welcomePage" style="display: none; justify-content: center; align-items: center; height: 100vh; background: rgb(179, 229, 252);">
+    <div style="background: #fff; border-radius: 20px; box-shadow: 0 8px 32px rgba(44,62,80,0.15); padding: 40px 60px; max-width: 700px; width: 90%; display: flex; align-items: center; gap: 40px;">
+        <div style="flex: 1;">
+            <h2 style="color: #2c3e50; font-size: 2.2em; margin-bottom: 10px;">Introduce Your Business</h2>
+            <p style="color: #555; font-size: 1.1em; margin-bottom: 30px;">
+               Welcome to my Inventory Management System! Upgrade your business operations with our powerful tools.
+            </p>
+            <button onclick="showDashboard()" style="background: rgba(0, 0, 0, 0.2)#000000; color: #fff; border: none; border-radius: 30px; padding: 14px 36px; font-size: 1.1em; font-weight: bold; cursor: pointer; box-shadow: 0 2px 8px #e14b8c44; transition: background 0.3s;">
+                Get Started
+            </button>
+        </div>
+        <div style="flex: 1; display: flex; justify-content: center;">
+            <img src="./Inventory_files/Business start up landing page _ Free Vector.jpg" alt="Startup Rocket" style="max-width: 320px; width: 100%; border-radius: 16px; box-shadow: 0 4px 16px #0001;">
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Products Page -->
+    <div id="productsPage" style="display: block;">
+        <h2><strong>Inventory Management System</strong></h2>
+
+        <!-- Search and Filters -->
+        <div id="filters">
+            <input type="text" id="searchInput" placeholder="Search for a product..." oninput="searchProducts()">
+            <select id="filterCategory" onchange="applyFilters()">
+                <option value="">All Categories</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Groceries">Groceries</option>
+            </select>
+            <input type="number" id="filterPriceMin" placeholder="Min Price" oninput="applyFilters()">
+            <input type="number" id="filterPriceMax" placeholder="Max Price" oninput="applyFilters()">
+            <select id="filterStock" onchange="applyFilters()">
+                <option value="">All Stock</option>
+                <option value="inStock">In Stock</option>
+                <option value="outOfStock">Out of Stock</option>
+            </select>
+            <button onclick="printInventory()">Print Report</button>
+        </div>
+        
+     
+ <style>   
+        body { text-align: center; font-family: sans-serif; background: #f0f0f0; }
+    video { width: 80%; max-width: 400px; margin-top: 20px; }
+    canvas { display: none; }
+    #result { margin-top: 20px; font-size: 18px; font-weight: bold; color: green; }
+  </style>
+
+
+  <h1>Position Item to Scan</h1>
+  <video id="video" autoplay="" playsinline="true"></video>
+  <canvas id="canvas" width="640" height="480"></canvas>
+
+    <div style="display:flex; align-items:center; gap:24px; justify-content:center; margin-bottom:10px;">
+        <button id="scanButton" onclick="startScan()">Scan Item</button>
+        <button id="snapButton" onclick="snapPicture()" style="display:none;">Snap Picture</button>
+        <img id="scannedImagePreview" src="" alt="Product Image" style="display:none; width:80px; height:80px; object-fit:cover; border:1px solid #ccc; border-radius:8px;" />
+    </div>
+
+
+    <!-- Scan Product Form (hidden by default) -->
+    <div id="scanProductForm" style="display:none; text-align:center; margin:20px 0; box-shadow:0 4px 16px rgba(44,62,80,0.18); border-radius:12px; background:#fff;">
+        <h3>Enter Product Details</h3>
+        <div style="display:flex; align-items:center; justify-content:center; gap:16px;">
+            <div>
+                <input type="text" id="scanItemId" placeholder="Product ID" readonly style="background:#eee; margin-bottom:8px;"><br>
+                <input type="text" id="scanItemName" placeholder="Item Name"><br>
+                <input type="number" id="scanItemQty" placeholder="Quantity" min="0"><br>
+                <input type="number" id="scanItemPrice" placeholder="Price (GHC)" min="0"><br>
+                <select id="scanItemCategory"></select><br>
+            </div>
+            <div>
+                <img id="scanProductImageBox" src="" alt="Product Image" style="width:80px; height:80px; object-fit:cover; border:1px solid #ccc; border-radius:8px; display:none;" />
+            </div>
+        </div>
+        <button onclick="addScannedProduct()">Add to Product List</button>
+        <button onclick="hideScanProductForm()">Cancel</button>
+    </div>
+ 
+
+        <!-- Add New Product -->
+    <div style="text-align: center;">
+        <h3>Add New Product</h3>
+        <input type="text" id="itemName" placeholder="Item Name">
+        <input type="number" id="itemQty" placeholder="Quantity" min="0">
+        <input type="number" id="itemPrice" placeholder="Price (GHC)" min="0">
+        <select id="itemCategory"><option value="Electronics">Electronics</option><option value="Clothing">Clothing</option><option value="Groceries">Groceries</option><option value="Food">Food</option><option value="car">car</option></select>
+        <button onclick="addItem()">Add Item</button>
+    </div>
+
+    <!-- Add this above the "Add New Product" section to manage categories -->
+    <div id="categoryManager" style="text-align:center; margin-bottom:30px;">
+        <h3>Manage Categories</h3>
+        <input type="text" id="newCategoryInput" placeholder="Add new category" style="padding:8px; border-radius:5px; border:1px solid #ccc;">
+        <button onclick="addCategory()" style="padding:8px 18px; border-radius:5px; background:#3498db; color:#fff; border:none; cursor:pointer;">Add</button>
+        <div id="categoryList" style="margin-top:15px;"><span style="margin-right: 10px;">Electronics<button style="margin-left: 5px; background: rgb(231, 76, 60); color: rgb(255, 255, 255); border: none; border-radius: 5px; cursor: pointer;">Delete</button></span><span style="margin-right: 10px;">Clothing<button style="margin-left: 5px; background: rgb(231, 76, 60); color: rgb(255, 255, 255); border: none; border-radius: 5px; cursor: pointer;">Delete</button></span><span style="margin-right: 10px;">Groceries<button style="margin-left: 5px; background: rgb(231, 76, 60); color: rgb(255, 255, 255); border: none; border-radius: 5px; cursor: pointer;">Delete</button></span><span style="margin-right: 10px;">Food<button style="margin-left: 5px; background: rgb(231, 76, 60); color: rgb(255, 255, 255); border: none; border-radius: 5px; cursor: pointer;">Delete</button></span><span style="margin-right: 10px;">car<button style="margin-left: 5px; background: rgb(231, 76, 60); color: rgb(255, 255, 255); border: none; border-radius: 5px; cursor: pointer;">Delete</button></span></div>
+    </div>
+
+
+        <!-- Inventory Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Product ID</th>
+                    <th>Item Name</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Price (GHC)</th>
+                    <th>Add Stock</th>
+                    <th>Sell</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="inventoryTable">
+                    <td>SBJ-0001</td>
+                    <td>Laptop</td>
+                    <td>Electronics</td>
+                    <td>60</td>
+                    <td>GHC 6000.00</td>
+                    <td><input type="number" id="addStockQty0" placeholder="Qty to Add" min="1">
+                        <button onclick="addStock(0)">Add Stock</button>
+                    </td>
+                    <td>
+                        <input type="number" id="sellQty0" placeholder="Qty to Sell" min="1">
+                        <button onclick="sellItem(0)">Sell</button>
+                    </td>
+                    <td>
+                        <button onclick="showDetails(0)">Show Details</button>
+                        <button onclick="confirmDeleteItem(0)">Delete</button>
+                        <button onclick="toggleEditPrice(0)">Edit Price</button>
+                        <div id="editPrice0" class="edit-price">
+                            <input type="number" id="newPrice0" value="6000" placeholder="New Price (GHC)">
+                            <button onclick="savePrice(0)">Save</button>
+                        </div>
+                    </td>
+                </tr><tr class="">
+                    <td>SBJ-0002</td>
+                    <td>Benz</td>
+                    <td>car</td>
+                    <td>60</td>
+                    <td>GHC 6000.00</td>
+                    <td><input type="number" id="addStockQty1" placeholder="Qty to Add" min="1">
+                        <button onclick="addStock(1)">Add Stock</button>
+                    </td>
+                    <td>
+                        <input type="number" id="sellQty1" placeholder="Qty to Sell" min="1">
+                        <button onclick="sellItem(1)">Sell</button>
+                    </td>
+                    <td>
+                        <button onclick="showDetails(1)">Show Details</button>
+                        <button onclick="confirmDeleteItem(1)">Delete</button>
+                        <button onclick="toggleEditPrice(1)">Edit Price</button>
+                        <div id="editPrice1" class="edit-price">
+                            <input type="number" id="newPrice1" value="6000" placeholder="New Price (GHC)">
+                            <button onclick="savePrice(1)">Save</button>
+                        </div>
+                    </td>
+                </tr></tbody>
+        </table>
+    </div>
+
+    <!-- Audit Log -->
+    <div id="auditLog" style="display: none;">
+        <h3>Audit Log</h3>
+        <div id="auditLogContent"></div>
+    </div>
+
+    <!-- Settings Page -->
+    <div id="settingsPage" style="display: none;">
+        <h2>Settings</h2>
+        <button onclick="backupData()">Backup Data</button>
+        <button onclick="restoreData()">Restore Data</button>
+        <button onclick="clearAllData()">Clear All Data</button>
+        <button onclick="toggleTheme()">Toggle Theme</button>
+        <button onclick="exportToCSV()">Export Data as CSV</button>
+
+        
+
+
+
+    </div>
+    <div id="calculatorModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);z-index:9999;justify-content:center;align-items:center;">
+    <div style="background:#fff;border-radius:10px;padding:20px;min-width:260px;box-shadow:0 2px 10px #0003;position:relative;" class="calc-content">
+        <button onclick="closeCalculator()" style="position:absolute;top:8px;right:10px;background:none;border:none;font-size:1.2em;cursor:pointer;">×</button>
+    <input id="calcDisplay" type="text" readonly style="width:160px;font-size:1.1em;margin-bottom:10px;text-align:right;padding:6px;border-radius:5px;border:1px solid #ccc;">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+            <button onclick="calcInput(&#39;7&#39;)">7</button>
+            <button onclick="calcInput(&#39;8&#39;)">8</button>
+            <button onclick="calcInput(&#39;9&#39;)">9</button>
+            <button onclick="calcInput(&#39;/&#39;)">÷</button>
+            <button onclick="calcInput(&#39;4&#39;)">4</button>
+            <button onclick="calcInput(&#39;5&#39;)">5</button>
+            <button onclick="calcInput(&#39;6&#39;)">6</button>
+            <button onclick="calcInput(&#39;*&#39;)">×</button>
+            <button onclick="calcInput(&#39;1&#39;)">1</button>
+            <button onclick="calcInput(&#39;2&#39;)">2</button>
+            <button onclick="calcInput(&#39;3&#39;)">3</button>
+            <button onclick="calcInput(&#39;-&#39;)">−</button>
+            <button onclick="calcInput(&#39;0&#39;)">0</button>
+            <button onclick="calcInput(&#39;.&#39;)">.</button>
+            <button onclick="calcClear()">C</button>
+            <button onclick="calcInput(&#39;+&#39;)">+</button>
+            <button style="grid-column:1/5;background:#2ecc71;color:#fff;" onclick="calcEquals()">=</button>
+        </div>
+    </div>
+</div>
+
+    <!-- Details Modal -->
+    <div id="details">
+        <span class="close-btn" onclick="closeDetails()">×</span>
+        <div id="detailsContent"></div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification" style="display: none;"></div>
+
+    <!-- Confirmation Dialog -->
+    <div id="deleteConfirmation" class="confirmation-dialog">
+        <p>Are you sure you want to delete this item?</p>
+        <button onclick="confirmDelete()">Yes</button>
+        <button onclick="cancelDelete()">No</button>
+    </div>
+
+    <div id="logoutConfirmation" class="confirmation-dialog">
+        <p>Are you sure you want to logout?</p>
+        <button onclick="confirmLogoutAction()">Yes</button>
+        <button onclick="cancelLogout()">No</button>
+    </div>
+
+    <!-- Print Section -->
+    <div id="printSection" style="display: none;">
+        <h2>Inventory Report</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Item Name</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Price (GHC)</th>
+                </tr>
+            </thead>
+            <tbody id="printTable">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+
+        // Load categories from localStorage or default
+function getCategories() {
+    let categories = JSON.parse(localStorage.getItem('categories'));
+    if (!categories || !Array.isArray(categories) || categories.length === 0) {
+        categories = ["Electronics", "Clothing", "Groceries"];
+        localStorage.setItem('categories', JSON.stringify(categories));
+    }
+    return categories;
+}
+
+// Render categories in select and manager
+function renderCategories() {
+    let categories = getCategories();
+    let select = document.getElementById('itemCategory');
+    let list = document.getElementById('categoryList');
+    select.innerHTML = '';
+    list.innerHTML = '';
+    categories.forEach((cat, idx) => {
+        // Add to select
+        let option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        select.appendChild(option);
+        // Add to manager list
+        let span = document.createElement('span');
+        span.textContent = cat;
+        span.style.marginRight = "10px";
+        let delBtn = document.createElement('button');
+        delBtn.textContent = "Delete";
+        delBtn.style.marginLeft = "5px";
+        delBtn.style.background = "#e74c3c";
+        delBtn.style.color = "#fff";
+        delBtn.style.border = "none";
+        delBtn.style.borderRadius = "5px";
+        delBtn.style.cursor = "pointer";
+        delBtn.onclick = function() { deleteCategory(idx); };
+        span.appendChild(delBtn);
+        list.appendChild(span);
+    });
+}
+
+// Add new category
+function addCategory() {
+    let input = document.getElementById('newCategoryInput');
+    let newCat = input.value.trim();
+    if (!newCat) return;
+    let categories = getCategories();
+    if (categories.includes(newCat)) {
+        alert("Category already exists!");
+        return;
+    }
+    categories.push(newCat);
+    localStorage.setItem('categories', JSON.stringify(categories));
+    input.value = '';
+    renderCategories();
+}
+
+// Delete category
+function deleteCategory(idx) {
+    let categories = getCategories();
+    if (categories.length <= 1) {
+        alert("At least one category is required.");
+        return;
+    }
+    categories.splice(idx, 1);
+    localStorage.setItem('categories', JSON.stringify(categories));
+    renderCategories();
+}
+
+// Call renderCategories on page load
+document.addEventListener('DOMContentLoaded', renderCategories);
+        // Show Dashboard
+        function showDashboard() {
+            document.getElementById('welcomePage').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('productsPage').style.display = 'none';
+            document.getElementById('auditLog').style.display = 'none';
+            document.getElementById('settingsPage').style.display = 'none';
+            updateDashboard();
+        }
+
+        // Show Products Page
+        function showProductsPage() {
+            document.getElementById('welcomePage').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('productsPage').style.display = 'block';
+            document.getElementById('auditLog').style.display = 'none';
+            document.getElementById('settingsPage').style.display = 'none';
+            loadInventory();
+        }
+
+        
+        // Show Audit Log
+        function showAuditLog() {
+            document.getElementById('welcomePage').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('productsPage').style.display = 'none';
+            document.getElementById('auditLog').style.display = 'block';
+            document.getElementById('settingsPage').style.display = 'none';
+            loadAuditLog();
+        }
+
+        //Show Low stocks on dashboard
+        function showLowStockItems() {
+            let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+            let lowStockItems = inventory.filter(item => item.quantity < 5);
+        
+            if (lowStockItems.length === 0) {
+                alert("No low-stock items found.");
+                return;
+            }
+        
+            let tableContent = lowStockItems.map(item => `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.category}</td>
+                    <td>${item.quantity}</td>
+                    <td>GHC ${item.price.toFixed(2)}</td>
+                </tr>
+            `).join('');
+        
+            let table = `
+                <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Item Name</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Price (GHC)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableContent}
+                    </tbody>
+                </table>
+            `;
+        
+            // Create a modal to display the table
+            let modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '50%';
+            modal.style.left = '50%';
+            modal.style.transform = 'translate(-50%, -50%)';
+            modal.style.backgroundColor = '#fff';
+            modal.style.padding = '20px';
+            modal.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+            modal.style.zIndex = '1000';
+            modal.style.width = '80%';
+            modal.style.maxWidth = '600px';
+        
+            modal.innerHTML = `
+                <h2>Low Stock Items</h2>
+                ${table}
+                <button onclick="this.parentElement.remove()" style="margin-top: 10px; padding: 5px 10px; background-color: #007bff; color: #fff; border: none; cursor: pointer;">Close</button>
+            `;
+        
+            document.body.appendChild(modal);
+        }
+
+
+        // Show Settings Page
+        function showSettingsPage() {
+            document.getElementById('welcomePage').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('productsPage').style.display = 'none';
+            document.getElementById('auditLog').style.display = 'none';
+            document.getElementById('settingsPage').style.display = 'block';
+        }
+
+// Ensure the user is logged in to access this page
+if (!localStorage.getItem('isLoggedIn')) {
+    window.location.href = "index.html"; // Redirect to login page
+    logAction("Logged In"); 
+}
+
+// Show logout confirmation dialog
+function confirmLogout() {
+    document.getElementById('logoutConfirmation').style.display = 'block';
+}
+
+// Perform logout action if confirmed
+function confirmLogoutAction() {
+    // Clear all session data
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('username'); // Clear username if stored
+    localStorage.removeItem('password'); // Clear password if stored
+    localStorage.removeItem('currentUser'); // Clear current user if stored
+
+    // Redirect to login page
+    window.location.href = "index.html";
+
+    // Prevent caching of the inventory page
+    window.onpageshow = function(event) {
+        if (event.persisted) {
+            window.location.reload(); // Force reload if user tries to go back
+        }
+    };
+}
+
+// Cancel logout and hide confirmation dialog
+function cancelLogout() {
+    document.getElementById('logoutConfirmation').style.display = 'none';
+}
+
+        
+
+        // Delete Confirmation
+        let deleteIndex = null;
+
+        function confirmDeleteItem(index) {
+            deleteIndex = index;
+            document.getElementById('deleteConfirmation').style.display = 'block';
+        }
+
+        function confirmDelete() {
+            if (deleteIndex !== null) {
+                deleteItem(deleteIndex);
+                document.getElementById('deleteConfirmation').style.display = 'none';
+            }
+        }
+
+        function cancelDelete() {
+            document.getElementById('deleteConfirmation').style.display = 'none';
+        }
+
+        // Handle Enter Key
+        function handleEnterKey(event, callback) {
+            if (event.key === 'Enter') {
+                callback();
+            }
+        }
+
+        
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Get all menu links
+    let menuLinks = document.querySelectorAll("#menuBar nav a");
+
+    // Get current page URL
+    let currentUrl = window.location.pathname.split("/").pop();
+
+    // Loop through links to find the active one
+    menuLinks.forEach(link => {
+        let linkUrl = link.getAttribute("href");
+
+        if (linkUrl === currentUrl) {
+            link.classList.add("active");
+        }
+
+        // Remove 'active' from others and add it to clicked link
+        link.addEventListener("click", function () {
+            menuLinks.forEach(l => l.classList.remove("active"));
+            this.classList.add("active");
+        });
+    });
+});
+
+
+
+
+
+
+
+        // Load Inventory
+        function loadInventory() {
+            let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+            let table = document.getElementById('inventoryTable');
+            table.innerHTML = '';
+
+
+            inventory.forEach((item, index) => {
+                item.quantity = parseInt(item.quantity, 10);
+                let rowClass = '';
+                if (item.quantity === 0 || item.quantity <= 5) {
+                    rowClass = 'low-stock';
+                }
+                let imgCell = '';
+                if (item.image) {
+                    imgCell = `<img src="${item.image}" alt="Product Image" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid #ccc;" />`;
+                } else {
+                    imgCell = `<span style='color:#bbb;font-size:12px;'>No Image</span>`;
+                }
+                let row = `<tr class="${rowClass}">
+                    <td>${imgCell}</td>
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.category}</td>
+                    <td>${item.quantity}</td>
+                    <td>GHC ${item.price.toFixed(2)}</td>
+                    <td><input type="number" id="addStockQty${index}" placeholder="Qty to Add" min="1">
+                        <button onclick="addStock(${index})">Add Stock</button>
+                    </td>
+                    <td>
+                        <input type="number" id="sellQty${index}" placeholder="Qty to Sell" min="1">
+                        <button onclick="sellItem(${index})">Sell</button>
+                    </td>
+                    <td>
+                        <button onclick="showDetails(${index})">Show Details</button>
+                        <button onclick="confirmDeleteItem(${index})">Delete</button>
+                        <button onclick="toggleEditPrice(${index})">Edit Price</button>
+                        <div id="editPrice${index}" class="edit-price">
+                            <input type="number" id="newPrice${index}" value="${item.price}" placeholder="New Price (GHC)">
+                            <button onclick="savePrice(${index})">Save</button>
+                        </div>
+                    </td>
+                </tr>`;
+                table.innerHTML += row;
+            });
+
+            checkStockLevels();
+            updateDashboard();
+        }
+
+        
+
+// Clear Input Fields Function
+function clearInputFields() {
+    document.getElementById('itemName').value = '';
+    document.getElementById('itemQty').value = '';
+    document.getElementById('itemPrice').value = '';
+    document.getElementById('itemCategory').value = ''; // Reset to default if needed
+}
+
+// Add Item Function
+function addItem() {
+    let name = document.getElementById('itemName').value.trim();
+    let quantity = parseInt(document.getElementById('itemQty').value);
+    let price = parseFloat(document.getElementById('itemPrice').value);
+    let category = document.getElementById('itemCategory').value;
+    let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+
+    // Find the highest SBL-xxxx ID in inventory and increment
+    let maxId = 0;
+    inventory.forEach(function(item) {
+        if (item.id && typeof item.id === 'string' && item.id.startsWith('SBL-')) {
+            var num = parseInt(item.id.replace('SBL-', ''));
+            if (!isNaN(num) && num > maxId) maxId = num;
+        }
+    });
+    let id = `SBL-${String(maxId + 1).padStart(4, '0')}`;
+
+    if (!name || isNaN(quantity) || isNaN(price) || quantity < 0 || price < 0) {
+        alert("Please provide valid inputs.");
+        return;
+    }
+
+    let duplicateName = inventory.find(item => item.name.toLowerCase() === name.toLowerCase());
+    if (duplicateName) {
+        alert("A product with this name already exists!");
+        return;
+    }
+
+    inventory.push({
+        id: id,
+        name: name,
+        category: category,
+        quantity: quantity,
+        price: price,
+        totalSold: 0,
+        soldLastWeek: 0,
+        soldLastMonth: 0,
+        lastSoldDate: null,
+        sales: [] // Initialize sales array
+    });
+    localStorage.setItem('inventory', JSON.stringify(inventory));
+    logAction(`Added product: ${name}`); // Log the action
+    loadInventory();
+    showNotification("Product added successfully!", "success");
+
+    // Clear input fields after adding the item
+    clearInputFields();
+}
+
+// Clear Input Fields on Page Load
+document.addEventListener('DOMContentLoaded', function () {
+    clearInputFields(); // Clear input fields on page load
+});
+
+
+
+
+                // Add Stock to Product
+        function addStock(index) {
+            let quantityToAdd = parseInt(document.getElementById(`addStockQty${index}`).value);
+            let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+
+            if (!isNaN(quantityToAdd) && quantityToAdd > 0) {
+                inventory[index].quantity += quantityToAdd;
+                localStorage.setItem('inventory', JSON.stringify(inventory));
+                logAction(`Added stock to product: ${inventory[index].name}`);
+                loadInventory();
+                showNotification("Stock added successfully!", "success");
+            } else {
+                alert("Please enter a valid quantity.");
+            }
+        }
+        
+
+
+        // Sell Product
+        function sellItem(index) {
+            let quantityToSell = parseInt(document.getElementById(`sellQty${index}`).value);
+            let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+            if (!inventory[index]) {
+                alert("Product not found.");
+                return;
+            }
+            if (!Array.isArray(inventory[index].sales)) {
+                inventory[index].sales = [];
+            }
+            if (typeof inventory[index].totalSold !== 'number') inventory[index].totalSold = 0;
+            if (typeof inventory[index].soldLastWeek !== 'number') inventory[index].soldLastWeek = 0;
+            if (typeof inventory[index].soldLastMonth !== 'number') inventory[index].soldLastMonth = 0;
+            if (!isNaN(quantityToSell) && quantityToSell > 0 && inventory[index].quantity >= quantityToSell) {
+                inventory[index].quantity -= quantityToSell;
+                let salePrice = inventory[index].price;
+                let saleDate = new Date();
+                inventory[index].sales.push({
+                    quantity: quantityToSell,
+                    price: salePrice,
+                    date: saleDate.toISOString()
+                });
+                inventory[index].totalSold += quantityToSell;
+                let currentDate = saleDate;
+                let lastWeekDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+                if (!inventory[index].lastSoldDate || new Date(inventory[index].lastSoldDate) >= lastWeekDate) {
+                    inventory[index].soldLastWeek += quantityToSell;
+                }
+                let lastMonthDate = new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000);
+                if (!inventory[index].lastSoldDate || new Date(inventory[index].lastSoldDate) >= lastMonthDate) {
+                    inventory[index].soldLastMonth += quantityToSell;
+                }
+                inventory[index].lastSoldDate = currentDate.toISOString();
+                localStorage.setItem('inventory', JSON.stringify(inventory));
+                logAction(`Sold product: ${inventory[index].name}`);
+                loadInventory();
+                updateDashboard(); // <-- Add this line to update revenue in real time
+                showNotification("Product sold successfully!", "success");
+
+                // Show receipt
+                showReceipt({
+                    name: inventory[index].name,
+                    productId: inventory[index].id,
+                    quantity: quantityToSell,
+                    price: salePrice,
+                    total: (salePrice * quantityToSell),
+                    date: saleDate
+                });
+            } else {
+                alert("Please enter a valid quantity or ensure there is enough stock.");
+            }
+        }
+
+        function showReceipt({name, productId, quantity, price, total, date}) {
+            const receiptContent = document.getElementById('receiptContent');
+            receiptContent.innerHTML = `
+                <p><strong>Product:</strong> ${name}</p>
+                <p><strong>Product ID:</strong> ${productId}</p>
+                <p><strong>Quantity Sold:</strong> ${quantity}</p>
+                <p><strong>Price per Unit:</strong> ₦${price.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</p>
+                <p><strong>Total Price:</strong> <span style='font-size:1.2em;'>₦${total.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</span></p>
+                <p><strong>Date:</strong> ${date.toLocaleString()}</p>
+            `;
+            document.getElementById('receiptModal').style.display = 'flex';
+        }
+
+        function closeReceipt() {
+            document.getElementById('receiptModal').style.display = 'none';
+        }
+
+        
+
+        // Show Product Details
+        function showDetails(index) {
+            let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+            let item = inventory[index];
+            let totalRevenue = item.sales.reduce((sum, sale) => sum + (sale.quantity * sale.price), 0);
+        
+            let detailsContent = `
+                <h3>${item.name} - ${item.id}</h3>
+                <p><strong>Category:</strong> ${item.category}</p>
+                <p><strong>Price:</strong> GHC ${item.price.toFixed(2)}</p>
+                <p><strong>Remaining Stock:</strong> ${item.quantity}</p>
+                <p><strong>Total Sold:</strong> ${item.totalSold}</p>
+                <p><strong>Sold in Last Week:</strong> ${item.soldLastWeek}</p>
+                <p><strong>Sold in Last Month:</strong> ${item.soldLastMonth}</p>
+                <p><strong>Total Revenue:</strong> GHC ${totalRevenue.toFixed(2)}</p>
+            `;
+            document.getElementById('detailsContent').innerHTML = detailsContent;
+            document.getElementById('details').style.display = 'block';
+        }
+
+        // Close Details Modal
+        function closeDetails() {
+            document.getElementById('details').style.display = 'none';
+        }
+
+        // Delete Item
+        function deleteItem(index) {
+            let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+            let itemName = inventory[index].name;
+            inventory.splice(index, 1);
+            localStorage.setItem('inventory', JSON.stringify(inventory));
+            logAction(`Deleted product: ${itemName}`); 
+            // Log the action
+            loadInventory();
+            showNotification("Item deleted successfully!", "success");
+        }
+
+        // Toggle Price Edit
+        function toggleEditPrice(index) {
+            let editDiv = document.getElementById(`editPrice${index}`);
+            editDiv.style.display = (editDiv.style.display === 'none' || editDiv.style.display === '') ? 'block' : 'none';
+        }
+
+        // Save New Price
+        function savePrice(index) {
+            let newPrice = parseFloat(document.getElementById(`newPrice${index}`).value);
+            let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+            if (!isNaN(newPrice) && newPrice >= 0) {
+                inventory[index].price = newPrice;
+                localStorage.setItem('inventory', JSON.stringify(inventory));
+                logAction(`Updated price for product: ${inventory[index].name}`);
+                loadInventory();
+                showNotification("Price updated successfully!", "success");
+            } else {
+                alert("Please enter a valid price.");
+            }
+        }
+
+        // Show Notification
+        function showNotification(message, type) {
+            let notification = document.getElementById('notification');
+            notification.innerHTML = message;
+            notification.style.backgroundColor = (type === 'success') ? '#2ecc71' : '#e74c3c';
+            notification.style.display = 'block';
+            setTimeout(() => notification.style.display = 'none', 3000);
+        }
+
+// Backup Data
+function backupData() {
+    let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+    let blob = new Blob([JSON.stringify(inventory)], { type: 'application/json' });
+    let link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'inventory_backup.json';
+    link.click();
+    
+    logAction("Backed up inventory data to file"); // Log the action
+}
+
+
+// Restore Data
+function restoreData() {
+    let fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.json';
+    fileInput.onchange = function(event) {
+        let file = event.target.files[0];
+        if (file) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    let restoredData = JSON.parse(e.target.result);
+                    
+                    // Validate the restored data
+                    if (Array.isArray(restoredData)) {
+                        localStorage.setItem('inventory', JSON.stringify(restoredData));
+                        logAction("Restored inventory data from file"); // Log the action
+                        loadInventory();
+                        showNotification("Data restored successfully!", "success");
+                    } else {
+                        alert("Invalid data format. Please ensure the file contains a valid inventory array.");
+                    }
+                } catch (error) {
+                    alert("Failed to restore data. The file might be corrupted or in an incorrect format.");
+                }
+            };
+            reader.onerror = function() {
+                alert("Error reading the file. Please try again.");
+            };
+            reader.readAsText(file);
+        }
+    };
+    fileInput.click();
+}
+
+
+// Clear All Data
+function clearAllData() {
+    if (confirm("Are you sure you want to clear all data? This action cannot be undone.")) {
+        localStorage.removeItem('inventory');
+        logAction("Cleared all inventory data"); // Log the action
+        loadInventory();
+        showNotification("All data cleared successfully!", "success");
+    }
+}
+
+
+        // Toggle Theme
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            let theme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        }
+
+        // Apply Saved Theme
+        function applyTheme() {
+            let savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+            }
+        }
+
+        // Export Data as CSV
+        function exportToCSV() {
+            let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+            if (inventory.length === 0) {
+                alert("No data to export.");
+                return;
+                
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "ID,Name,Category,Quantity,Price,Total Sold,Sold Last Week,Sold Last Month,Last Sold Date\n";
+            inventory.forEach(item => {
+                csvContent += `${item.id},${item.name},${item.category},${item.quantity},${item.price},${item.totalSold},${item.soldLastWeek},${item.soldLastMonth},${item.lastSoldDate}\n`;
+            });
+
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement('a');
+            link.href = encodedUri;
+            link.download = 'inventory_export.csv';
+            link.click();
+        }
+
+        // Update Dashboard
+        function updateDashboard() {
+            let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+            let totalProducts = inventory.length;
+            let outOfStock = inventory.filter(item => item.quantity === 0).length;
+
+            // Calculate total revenue from sales array
+            let totalRevenue = inventory.reduce((sum, item) => {
+                let itemRevenue = Array.isArray(item.sales)
+                    ? item.sales.reduce((itemSum, sale) => itemSum + (sale.quantity * sale.price), 0)
+                    : 0;
+                return sum + itemRevenue;
+            }, 0);
+
+            document.getElementById('totalProducts').textContent = totalProducts;
+            document.getElementById('outOfStock').textContent = outOfStock;
+            document.getElementById('totalRevenue').textContent = `GHC ${totalRevenue.toFixed(2)}`;
+
+            // Update Revenue Chart
+            let ctx = document.getElementById('revenueChart').getContext('2d');
+            let labels = inventory.map(item => item.name);
+            let data = inventory.map(item =>
+                Array.isArray(item.sales)
+                    ? item.sales.reduce((sum, sale) => sum + (sale.quantity * sale.price), 0)
+                    : 0
+            );
+
+            if (window.revenueChart) {
+                window.revenueChart.destroy();
+            }
+
+            window.revenueChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Revenue (GHC)',
+                        data: data,
+                        backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+// Function to check stock levels and notify users one by one
+function checkStockLevels() {
+    let inventory = JSON.parse(localStorage.getItem('inventory')) || []; // Retrieve inventory from localStorage
+
+    // Helper function to show notifications with delay
+    function showNotificationsSequentially(items, index = 0) {
+        if (index >= items.length) return; // Stop if all items have been processed
+
+        const item = items[index];
+        if (item.quantity === 0) {
+            // Out of stock (red notification)
+            showNotification(`"${item.name}" is out of stock!`, "error");
+        } else if (item.quantity <= 5) {
+            // Low stock (yellow notification)
+            showNotification(`"${item.name}" is low on stock!`, "warning");
+        }
+
+        // Show the next notification after a delay (e.g., 3 seconds)
+        setTimeout(() => {
+            showNotificationsSequentially(items, index + 1);
+        }, 3000); // Adjust the delay time as needed
+    }
+
+    // Filter items that need notifications
+    const itemsToNotify = inventory.filter(item => item.quantity === 0 || item.quantity <= 5);
+
+    // Start showing notifications sequentially
+    if (itemsToNotify.length > 0) {
+        showNotificationsSequentially(itemsToNotify);
+    }
+}
+
+// Example notification function (you can customize this based on your UI framework)
+function showNotification(message, type) {
+    const notificationDiv = document.createElement("div");
+    notificationDiv.className = `notification ${type}`; // Add CSS classes for styling
+    notificationDiv.textContent = message;
+
+    // Append to the body or a specific container
+    document.body.appendChild(notificationDiv);
+
+    // Remove notification after 5 seconds
+    setTimeout(() => {
+        notificationDiv.remove();
+    }, 5000);
+}
+
+        // Search Products
+        function searchProducts() {
+            let searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+            let filteredInventory = inventory.filter(item => item.name.toLowerCase().includes(searchTerm));
+            let table = document.getElementById('inventoryTable');
+            table.innerHTML = '';
+
+            filteredInventory.forEach((item, index) => {
+                item.quantity = parseInt(item.quantity, 10);
+                let rowClass = item.quantity === 0 ? 'out-of-stock' : '';
+
+                let row = `<tr class="${rowClass}">
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.category}</td>
+                    <td>${item.quantity}</td>
+                    <td>GHC ${item.price.toFixed(2)}</td>
+                    <td><input type="number" id="addStockQty${index}" placeholder="Qty to Add" min="1">
+                        <button onclick="addStock(${index})">Add Stock</button>
+                    </td>
+                    <td>
+                        <input type="number" id="sellQty${index}" placeholder="Qty to Sell" min="1">
+                        <button onclick="sellItem(${index})">Sell</button>
+                    </td>
+                    <td>
+                        <button onclick="showDetails(${index})">Show Details</button>
+                        <button onclick="confirmDeleteItem(${index})">Delete</button>
+                        <button onclick="toggleEditPrice(${index})">Edit Price</button>
+                        <div id="editPrice${index}" class="edit-price">
+                            <input type="number" id="newPrice${index}" value="${item.price}" placeholder="New Price (GHC)">
+                            <button onclick="savePrice(${index})">Save</button>
+                        </div>
+                    </td>
+                </tr>`;
+                table.innerHTML += row;
+            });
+        }
+
+        // Apply Filters
+        function applyFilters() {
+            let searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            let category = document.getElementById('filterCategory').value;
+            let priceMin = parseFloat(document.getElementById('filterPriceMin').value) || 0;
+            let priceMax = parseFloat(document.getElementById('filterPriceMax').value) || Infinity;
+            let stockFilter = document.getElementById('filterStock').value;
+
+            let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+            let filteredInventory = inventory.filter(item => {
+                let matchesSearch = item.name.toLowerCase().includes(searchTerm);
+                let matchesCategory = category ? item.category === category : true;
+                let matchesPrice = item.price >= priceMin && item.price <= priceMax;
+                let matchesStock = stockFilter === 'inStock' ? item.quantity > 0 : stockFilter === 'outOfStock' ? item.quantity === 0 : true;
+
+                return matchesSearch && matchesCategory && matchesPrice && matchesStock;
+            });
+
+            let table = document.getElementById('inventoryTable');
+            table.innerHTML = '';
+
+            filteredInventory.forEach((item, index) => {
+                item.quantity = parseInt(item.quantity, 10);
+                let rowClass = item.quantity === 0 ? 'out-of-stock' : '';
+
+                let row = `<tr class="${rowClass}">
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.category}</td>
+                    <td>${item.quantity}</td>
+                    <td>GHC ${item.price.toFixed(2)}</td>
+                    <td><input type="number" id="addStockQty${index}" placeholder="Qty to Add" min="1">
+                        <button onclick="addStock(${index})">Add Stock</button>
+                    </td>
+                    <td>
+                        <input type="number" id="sellQty${index}" placeholder="Qty to Sell" min="1">
+                        <button onclick="sellItem(${index})">Sell</button>
+                    </td>
+                    <td>
+                        <button onclick="showDetails(${index})">Show Details</button>
+                        <button onclick="confirmDeleteItem(${index})">Delete</button>
+                        <button onclick="toggleEditPrice(${index})">Edit Price</button>
+                        <div id="editPrice${index}" class="edit-price">
+                            <input type="number" id="newPrice${index}" value="${item.price}" placeholder="New Price (GHC)">
+                            <button onclick="savePrice(${index})">Save</button>
+                        </div>
+                    </td>
+                </tr>`;
+                table.innerHTML += row;
+            });
+        }
+
+        // Print Inventory Report
+function printInventory() {
+    let searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    let category = document.getElementById('filterCategory').value;
+    let priceMin = parseFloat(document.getElementById('filterPriceMin').value) || 0;
+    // Apply the same filters as in applyFilters
+    let filteredInventory = inventory.filter(item => {
+        let matchesSearch = item.name.toLowerCase().includes(searchTerm);
+        let matchesCategory = category ? item.category === category : true;
+        let matchesPrice = item.price >= priceMin && item.price <= priceMax;
+        let matchesStock = stockFilter === 'inStock' ? item.quantity > 0 : stockFilter === 'outOfStock' ? item.quantity === 0 : true;
+
+        return matchesSearch && matchesCategory && matchesPrice && matchesStock;
+    });
+
+    let printTable = document.getElementById('printTable');
+    printTable.innerHTML = '';
+
+    // Generate the print table rows based on the filtered inventory
+    filteredInventory.forEach(item => {
+        let row = `<tr>
+            <td>${item.id}</td>
+            <td>${item.name}</td>
+            <td>${item.category}</td>
+            <td>${item.quantity}</td>
+            <td>GHC ${item.price.toFixed(2)}</td>
+        </tr>`;
+        printTable.innerHTML += row;
+    });
+
+    // Display the print section, print, and then hide it
+    let printSection = document.getElementById('printSection');
+    printSection.style.display = 'block';
+    window.print();
+    printSection.style.display = 'none';
+}
+        // Load Audit Log
+        function loadAuditLog() {
+            let auditLog = JSON.parse(localStorage.getItem('auditLog')) || [];
+            let auditLogContent = document.getElementById('auditLogContent');
+            auditLogContent.innerHTML = '';
+        
+            auditLog.forEach(log => {
+                let logEntry = `<p>${log.timestamp}: ${log.username} - ${log.action}</p>`;
+                auditLogContent.innerHTML += logEntry;
+            });
+        }
+
+// Log Action
+function logAction(action) {
+    let auditLog = JSON.parse(localStorage.getItem('auditLog')) || [];
+    let timestamp = new Date().toLocaleString();
+    let username = localStorage.getItem('loggedInUser') || 'Unknown User'; // Get the logged-in user's name
+
+    // Add the user's name to the log entry
+    auditLog.push({ timestamp, action, username });
+    localStorage.setItem('auditLog', JSON.stringify(auditLog));
+}
+
+
+        // Load Inventory on Page Load
+        window.onload = function() {
+            applyTheme();
+            loadInventory();
+        };
+    let calcCurrent = '';
+function showCalculator() {
+    document.getElementById('calculatorModal').style.display = 'flex';
+    document.getElementById('calcDisplay').value = '';
+    calcCurrent = '';
+}
+function closeCalculator() {
+    document.getElementById('calculatorModal').style.display = 'none';
+}
+function calcInput(val) {
+    calcCurrent += val;
+    document.getElementById('calcDisplay').value = calcCurrent;
+}
+function calcClear() {
+    calcCurrent = '';
+    document.getElementById('calcDisplay').value = '';
+}
+function calcEquals() {
+    try {
+        let expr = calcCurrent.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-');
+        let result = eval(expr);
+        document.getElementById('calcDisplay').value = result;
+        calcCurrent = result.toString();
+    } catch {
+        document.getElementById('calcDisplay').value = 'Error';
+        calcCurrent = '';
+    }
+}
+document.addEventListener('mousedown', function(e) {
+    let modal = document.getElementById('calculatorModal');
+    if (modal.style.display === 'flex' && !modal.querySelector('.calc-content').contains(e.target)) {
+        closeCalculator();
+    }
+});
+
+  
+
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const result = document.getElementById('result');
+    const context = canvas.getContext(' 2d');
+
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+      .then(stream => {
+        video.srcObject = stream;
+        video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
+        requestAnimationFrame(scan);
+      })
+      .catch(err => {
+        alert('Error accessing camera: ' + err);
+      });
+
+    function scan()
+     {
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, canvas.width, canvas.height, {
+          inversionAttempts: "dontInvert",
+        });
+
+        if (code) {
+          result.textContent = "QR Code: " + code.data;
+        }
+      }
+      requestAnimationFrame(scan);
+    }
+    
+    </script>
+        <script>
+        // Show the scan product form when Scan button is clicked
+        function startScan() {
+            // Show video and snap button
+            document.getElementById('video').style.display = '';
+            document.getElementById('snapButton').style.display = '';
+            document.getElementById('scannedImagePreview').style.display = 'none';
+            document.getElementById('scanProductImageBox').style.display = 'none';
+            // Populate categories dynamically
+            var catSelect = document.getElementById('scanItemCategory');
+            catSelect.innerHTML = '';
+            var categories = JSON.parse(localStorage.getItem('categories')) || ["Electronics", "Clothing", "Groceries", "Food", "car"];
+            categories.forEach(function(cat) {
+                var opt = document.createElement('option');
+                opt.value = cat;
+                opt.textContent = cat;
+                catSelect.appendChild(opt);
+            });
+            document.getElementById('scanProductForm').style.display = 'block';
+        }
+
+        // Snap picture from video
+        function snapPicture() {
+            var video = document.getElementById('video');
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            var dataURL = canvas.toDataURL('image/png');
+            document.getElementById('scannedImagePreview').src = dataURL;
+            document.getElementById('scannedImagePreview').style.display = '';
+            document.getElementById('scanProductImageBox').src = dataURL;
+            document.getElementById('scanProductImageBox').style.display = '';
+            // Store image data for later use
+            document.getElementById('scanProductForm').setAttribute('data-image', dataURL);
+        }
+
+        // Hide the scan product form
+        function hideScanProductForm() {
+            document.getElementById('scanProductForm').style.display = 'none';
+        }
+
+        // Add scanned product to the product list
+        function addScannedProduct() {
+            var name = document.getElementById('scanItemName').value.trim();
+            var qty = parseInt(document.getElementById('scanItemQty').value);
+            var price = parseFloat(document.getElementById('scanItemPrice').value);
+            var category = document.getElementById('scanItemCategory').value;
+            var image = document.getElementById('scanProductForm').getAttribute('data-image') || '';
+            if (!name || isNaN(qty) || isNaN(price) || qty < 0 || price < 0) {
+                alert('Please fill in all product details correctly.');
+                return;
+            }
+            // Retrieve existing inventory from localStorage
+            var inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+            // Find the highest SBL-xxxx ID in inventory and increment
+            var maxId = 0;
+            inventory.forEach(function(item) {
+                if (item.id && typeof item.id === 'string' && item.id.startsWith('SBL-')) {
+                    var num = parseInt(item.id.replace('SBL-', ''));
+                    if (!isNaN(num) && num > maxId) maxId = num;
+                }
+            });
+            var id = 'SBL-' + String(maxId + 1).padStart(4, '0');
+            inventory.push({ id: id, name: name, quantity: qty, price: price, category: category, image: image });
+            localStorage.setItem('inventory', JSON.stringify(inventory));
+            alert('Product added successfully!');
+            hideScanProductForm();
+            // Optionally, refresh the product list if needed
+            if (typeof loadInventory === 'function') loadInventory();
+        }
+        </script>
+    <script src="./Inventory_files/chart.js.download"></script>
+    <script src="./Inventory_files/jsQR.js.download"></script>
+
+
+</body></html>
